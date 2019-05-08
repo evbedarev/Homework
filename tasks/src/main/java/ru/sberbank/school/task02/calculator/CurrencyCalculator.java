@@ -6,6 +6,7 @@ import ru.sberbank.school.task02.util.ClientOperation;
 import ru.sberbank.school.task02.util.Quote;
 import ru.sberbank.school.task02.util.Symbol;
 
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,7 @@ public class CurrencyCalculator implements FxConversionService {
                               @NonNull Symbol symbol,
                               @NonNull BigDecimal amount) {
         quotes = externalQuotesService.getQuotes(Symbol.USD_RUB);
-        this.amountOfRequest = amount.setScale(0, BigDecimal.ROUND_FLOOR);
+        this.amountOfRequest = amount.setScale(2, BigDecimal.ROUND_FLOOR);
         this.symbolOfRequest = symbol;
         if (check()) {
             return operation(operation);
@@ -85,5 +86,11 @@ public class CurrencyCalculator implements FxConversionService {
             return false;
         }
         return true;
+    }
+
+    public void showQuotes() {
+        for (Quote quote : quotes) {
+            System.out.println("");
+        }
     }
 }
