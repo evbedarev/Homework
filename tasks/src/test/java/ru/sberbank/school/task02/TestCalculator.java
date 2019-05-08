@@ -25,7 +25,7 @@ public class TestCalculator {
     public void buyTest() {
         BigDecimal result = conversionService.convert(buy, Symbol.USD_RUB, BigDecimal.valueOf(100));
         System.out.println(result);
-        Assert.assertTrue(result.compareTo(BigDecimal.valueOf(85)) == 0);
+        Assert.assertTrue(result.compareTo(BigDecimal.valueOf(84)) == 0);
         result = conversionService.convert(buy, Symbol.USD_RUB, BigDecimal.valueOf(9.000000011581329E8));
         Assert.assertTrue(result.compareTo(BigDecimal.valueOf(82)) == 0);
     }
