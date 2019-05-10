@@ -2,8 +2,8 @@ package ru.sberbank.school.task02;
 
 import org.junit.Before;
 import org.junit.Test;
-import ru.sberbank.school.task02.calculator.CurrencyCalculator;
 import ru.sberbank.school.task02.calculator.CustomExternalQutesService;
+import ru.sberbank.school.task02.calculator.ExtendedCurrencyCalculator;
 import ru.sberbank.school.task02.util.Beneficiary;
 import ru.sberbank.school.task02.util.ClientOperation;
 import ru.sberbank.school.task02.util.Symbol;
@@ -16,7 +16,7 @@ public class TestExtendedCalculator {
     @Before
     public void beforeAll() {
         ExternalQuotesService qutesService = new CustomExternalQutesService();
-        conversionService = new CurrencyCalculator(qutesService);
+        conversionService = new ExtendedCurrencyCalculator(qutesService);
     }
 
     @Test

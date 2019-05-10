@@ -2,6 +2,7 @@ package ru.sberbank.school.task02.calculator;
 
 import ru.sberbank.school.task02.ExtendedFxConversionService;
 import ru.sberbank.school.task02.ExternalQuotesService;
+import ru.sberbank.school.task02.FxConversionService;
 import ru.sberbank.school.task02.util.Beneficiary;
 import ru.sberbank.school.task02.util.ClientOperation;
 import ru.sberbank.school.task02.util.Quote;
@@ -16,12 +17,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.NonNull;
 
-public class CurrencyCalculator implements ExtendedFxConversionService {
-    private final ExternalQuotesService externalQuotesService;
-    private List<Quote> quotes = new ArrayList<>();
-    private BigDecimal amountOfRequest;
-    private Symbol symbolOfRequest;
-    private int rounding_mode;
+public class CurrencyCalculator implements FxConversionService {
+    final ExternalQuotesService externalQuotesService;
+    List<Quote> quotes = new ArrayList<>();
+    BigDecimal amountOfRequest;
+    Symbol symbolOfRequest;
 
     public CurrencyCalculator(ExternalQuotesService externalQuotesService) {
         this.externalQuotesService = externalQuotesService;
@@ -41,7 +41,7 @@ public class CurrencyCalculator implements ExtendedFxConversionService {
         return new BigDecimal(0);
     }
 
-    private BigDecimal operation(ClientOperation operation) {
+    BigDecimal operation(ClientOperation operation) {
         Optional<Quote> quote = findQuote(new CompareQutes());
 
         if (quote.isPresent() && operation == ClientOperation.SELL) {
@@ -53,21 +53,7 @@ public class CurrencyCalculator implements ExtendedFxConversionService {
         return new BigDecimal(0);
     }
 
-    private Optional<BigDecimal> extendedOperation(ClientOperation operation, Beneficiary beneficiary) {
-        Optional<Quote> quote = findQuote(new CompareQuotesBenificiary(operation, beneficiary));
-        if (!quote.isPresent()) {
-            return Optional.empty();
-        }
-        if (operation == ClientOperation.SELL) {
-            return Optional.of(BigDecimal.valueOf(1).divide(quote.get().getBid(),10,rounding_mode));
-        }
-        if (operation == ClientOperation.BUY) {
-            return Optional.of(BigDecimal.valueOf(1).divide(quote.get().getOffer(), 10,rounding_mode));
-        }
-        return Optional.empty();
-    }
-
-    private Optional<Quote> findQuote(Comparator<Quote> comparator) {
+    Optional<Quote> findQuote(Comparator<Quote> comparator) {
         BigDecimal amountQuote;
         List<Quote> sortedQuoteList = filterQutesList(comparator);
         for (Quote quote : sortedQuoteList) {
@@ -82,7 +68,7 @@ public class CurrencyCalculator implements ExtendedFxConversionService {
         return Optional.empty();
     }
 
-    private List<Quote> filterQutesList(Comparator<Quote> comparator) {
+    List<Quote> filterQutesList(Comparator<Quote> comparator) {
         showQuotes();
         List<Quote> filterBySymbolList = quotes.stream()
                 .sorted(comparator)
@@ -90,7 +76,7 @@ public class CurrencyCalculator implements ExtendedFxConversionService {
         return filterBySymbolList;
     }
 
-    private boolean check() {
+    boolean check() {
         if (quotes.size() == 0) {
             return false;
         }
@@ -103,33 +89,6 @@ public class CurrencyCalculator implements ExtendedFxConversionService {
         return true;
     }
 
-    @Override
-    public Optional<BigDecimal> convertReversed(ClientOperation operation, Symbol symbol, BigDecimal amount, Beneficiary beneficiary) {
-        quotes = externalQuotesService.getQuotes(Symbol.USD_RUB);
-        this.symbolOfRequest = symbol;
-        this.amountOfRequest = amount;
-
-        if ((beneficiary == Beneficiary.BANK && operation == ClientOperation.BUY) ||
-                (beneficiary == Beneficiary.CLIENT && operation == ClientOperation.SELL)) {
-            rounding_mode = BigDecimal.ROUND_CEILING;
-        }
-        if ((beneficiary == Beneficiary.BANK && operation == ClientOperation.SELL) ||
-                (beneficiary == Beneficiary.CLIENT && operation == ClientOperation.BUY)) {
-            rounding_mode = BigDecimal.ROUND_FLOOR;
-        }
-        this.amountOfRequest = amount.setScale(10, BigDecimal.ROUND_FLOOR);
-
-        if (check()) {
-            return extendedOperation(operation, beneficiary);
-        }
-        return Optional.empty();
-}
-
-    @Override
-    public Optional<BigDecimal> convertReversed(ClientOperation operation, Symbol symbol, BigDecimal amount, double delta, Beneficiary beneficiary) {
-        return Optional.empty();
-    }
-
     private void showQuotes() {
         for (Quote quote : quotes) {
             System.out.println("Get Quote symbol: " + quote.getSymbol() +
@@ -139,4 +98,10 @@ public class CurrencyCalculator implements ExtendedFxConversionService {
         }
     }
 
+    void showQuote(Quote quote) {
+        System.out.println("Get Quote symbol: " + quote.getSymbol() +
+                " volume: " + quote.getVolume() +
+                " bid: " + quote.getBid() +
+                " offer: " + quote.getOffer());
+    }
 }
