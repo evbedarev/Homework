@@ -23,10 +23,12 @@ public class TestExtendedCalculator {
     @Test
     public void testBenificiary() {
         Optional<BigDecimal> sum = conversionService.convertReversed(ClientOperation.BUY, Symbol.USD_RUB, BigDecimal.valueOf(99), Beneficiary.BANK);
-        Assert.assertTrue(sum.get().compareTo(BigDecimal.valueOf(0.0116279070)) == 0);
-        sum = conversionService.convertReversed(ClientOperation.BUY, Symbol.USD_RUB, BigDecimal.valueOf(99), Beneficiary.CLIENT);
-        Assert.assertTrue(sum.get().compareTo(BigDecimal.valueOf(0.0117647058)) == 0);
         System.out.println(sum.get());
+        Assert.assertTrue(sum.get().compareTo(BigDecimal.valueOf(0.0114942529)) == 0);
+        sum = conversionService.convertReversed(ClientOperation.BUY, Symbol.USD_RUB, BigDecimal.valueOf(99), Beneficiary.CLIENT);
+        System.out.println(sum.get());
+        Assert.assertTrue(sum.get().compareTo(BigDecimal.valueOf(0.0121951219)) == 0);
+
 
 
     }

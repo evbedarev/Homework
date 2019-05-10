@@ -7,6 +7,8 @@ import ru.sberbank.school.task02.util.ClientOperation;
 import ru.sberbank.school.task02.util.Quote;
 import ru.sberbank.school.task02.util.Symbol;
 import java.math.BigDecimal;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 
 public class ExtendedCurrencyCalculator extends CurrencyCalculator implements ExtendedFxConversionService {
@@ -17,7 +19,7 @@ public class ExtendedCurrencyCalculator extends CurrencyCalculator implements Ex
     }
 
     private Optional<BigDecimal> extendedOperation(ClientOperation operation, Beneficiary beneficiary) {
-        Optional<Quote> quote = findQuote(new CompareQuotesBenificiary(operation, beneficiary));
+        Optional<Quote> quote = findQuote(new CompareQuotesBenificiary(operation, beneficiary), quotes);
         if (!quote.isPresent()) {
             return Optional.empty();
         }
@@ -28,7 +30,23 @@ public class ExtendedCurrencyCalculator extends CurrencyCalculator implements Ex
         if (operation == ClientOperation.BUY) {
             return Optional.of(BigDecimal.valueOf(1).divide(quote.get().getOffer(), 10,rounding_mode));
         }
+        System.out.println("Nothing find");
         return Optional.empty();
+    }
+
+    Optional<Quote> findQuote(Comparator<Quote> comparator, List<Quote> quoteList) {
+        BigDecimal amountQuote;
+
+        for (Quote quote : quoteList) {
+            amountQuote = quote.getVolumeSize();
+
+            if (amountQuote.compareTo(amountOfRequest) <= 0 && !quote.getVolume().isInfinity()) {
+                quoteList.remove(quote);
+            }
+        }
+        quoteList.sort(comparator);
+        showQuotes(quoteList);
+        return Optional.of(quoteList.get(0));
     }
 
     @Override
@@ -36,6 +54,9 @@ public class ExtendedCurrencyCalculator extends CurrencyCalculator implements Ex
         quotes = externalQuotesService.getQuotes(Symbol.USD_RUB);
         this.symbolOfRequest = symbol;
         this.amountOfRequest = amount;
+        System.out.println("Get benificiary: " + beneficiary.toString());
+        System.out.println("Get symbol: " + symbol.getSymbol());
+        System.out.println("Get client operation: " + operation.toString());
         System.out.println("Get request volume: " +  amountOfRequest );
         if ((beneficiary == Beneficiary.BANK && operation == ClientOperation.BUY) ||
                 (beneficiary == Beneficiary.CLIENT && operation == ClientOperation.SELL)) {
