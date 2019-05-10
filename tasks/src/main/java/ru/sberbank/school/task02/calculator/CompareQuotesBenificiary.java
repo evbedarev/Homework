@@ -35,12 +35,12 @@ public class CompareQuotesBenificiary implements Comparator<Quote> {
     private int compareEqualQuotes(Quote quote1, Quote quote2) {
         if ((beneficiary == Beneficiary.BANK && operation == ClientOperation.BUY) ||
                 (beneficiary == Beneficiary.CLIENT && operation == ClientOperation.SELL)) {
-                return quote1.getOffer().compareTo(quote2.getOffer());
+                return quote2.getOffer().compareTo(quote1.getOffer());
         }
         if ((beneficiary == Beneficiary.BANK && operation == ClientOperation.SELL) ||
                 (beneficiary == Beneficiary.CLIENT && operation == ClientOperation.BUY)) {
-            return quote1.getBid().compareTo(quote2.getBid());
+            return quote2.getBid().compareTo(quote1.getBid());
         }
-        return 0;
+        return 1;
     }
 }

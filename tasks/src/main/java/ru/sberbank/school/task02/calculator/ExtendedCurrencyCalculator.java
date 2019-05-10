@@ -36,6 +36,7 @@ public class ExtendedCurrencyCalculator extends CurrencyCalculator implements Ex
         quotes = externalQuotesService.getQuotes(Symbol.USD_RUB);
         this.symbolOfRequest = symbol;
         this.amountOfRequest = amount;
+        System.out.println("Get request volume: " +  amountOfRequest );
         if ((beneficiary == Beneficiary.BANK && operation == ClientOperation.BUY) ||
                 (beneficiary == Beneficiary.CLIENT && operation == ClientOperation.SELL)) {
             rounding_mode = BigDecimal.ROUND_CEILING;

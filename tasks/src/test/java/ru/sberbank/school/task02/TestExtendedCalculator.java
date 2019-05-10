@@ -1,5 +1,6 @@
 package ru.sberbank.school.task02;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import ru.sberbank.school.task02.calculator.CustomExternalQutesService;
@@ -20,9 +21,14 @@ public class TestExtendedCalculator {
     }
 
     @Test
-    public void testBenificiarBank() {
-       Optional<BigDecimal> sum = conversionService.convertReversed(ClientOperation.BUY, Symbol.USD_RUB, BigDecimal.valueOf(99), Beneficiary.BANK);
+    public void testBenificiary() {
+        Optional<BigDecimal> sum = conversionService.convertReversed(ClientOperation.BUY, Symbol.USD_RUB, BigDecimal.valueOf(99), Beneficiary.BANK);
+        Assert.assertTrue(sum.get().compareTo(BigDecimal.valueOf(0.0116279070)) == 0);
+        sum = conversionService.convertReversed(ClientOperation.BUY, Symbol.USD_RUB, BigDecimal.valueOf(99), Beneficiary.CLIENT);
+        Assert.assertTrue(sum.get().compareTo(BigDecimal.valueOf(0.0117647058)) == 0);
         System.out.println(sum.get());
+
+
     }
 
 }

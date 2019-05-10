@@ -69,10 +69,11 @@ public class CurrencyCalculator implements FxConversionService {
     }
 
     List<Quote> filterQutesList(Comparator<Quote> comparator) {
-        showQuotes();
         List<Quote> filterBySymbolList = quotes.stream()
                 .sorted(comparator)
                 .collect(Collectors.toList());
+        System.out.println("Sorted List: ");
+        showQuotes(filterBySymbolList);
         return filterBySymbolList;
     }
 
@@ -89,19 +90,21 @@ public class CurrencyCalculator implements FxConversionService {
         return true;
     }
 
-    private void showQuotes() {
-        for (Quote quote : quotes) {
-            System.out.println("Get Quote symbol: " + quote.getSymbol() +
-                    " volume: " + quote.getVolume() +
-                    " bid: " + quote.getBid() +
-                    " offer: " + quote.getOffer());
+    void showQuotes(List<Quote> showQutesList) {
+        for (Quote quote : showQutesList) {
+            System.out.println("Get Quote id: " + quote.getId()
+                    + " symbol: " + quote.getSymbol()
+                    + " volume: " + quote.getVolume()
+                    + " bid: " + quote.getBid()
+                    + " offer: " + quote.getOffer());
         }
     }
 
     void showQuote(Quote quote) {
-        System.out.println("Get Quote symbol: " + quote.getSymbol() +
-                " volume: " + quote.getVolume() +
-                " bid: " + quote.getBid() +
-                " offer: " + quote.getOffer());
+        System.out.println("Find quote: " + quote.getId()
+                + " symbol: " + quote.getSymbol()
+                + " volume: " + quote.getVolume()
+                + " bid: " + quote.getBid()
+                + " offer: " + quote.getOffer());
     }
 }
