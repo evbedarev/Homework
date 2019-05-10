@@ -3,8 +3,6 @@ package ru.sberbank.school.task02.calculator;
 import ru.sberbank.school.task02.util.Beneficiary;
 import ru.sberbank.school.task02.util.ClientOperation;
 import ru.sberbank.school.task02.util.Quote;
-
-import java.math.BigDecimal;
 import java.util.Comparator;
 
 public class CompareQuotesBenificiary implements Comparator<Quote> {
@@ -29,14 +27,14 @@ public class CompareQuotesBenificiary implements Comparator<Quote> {
     }
 
     private int compareEqualQuotes(Quote quote1, Quote quote2) {
-        if ((beneficiary == Beneficiary.BANK && operation == ClientOperation.BUY) ||
-                (beneficiary == Beneficiary.CLIENT && operation == ClientOperation.SELL)) {
+        if ((beneficiary == Beneficiary.BANK && operation == ClientOperation.BUY)
+                || (beneficiary == Beneficiary.CLIENT && operation == ClientOperation.SELL)) {
                 return quote2.getOffer().compareTo(quote1.getOffer());
         }
-        if ((beneficiary == Beneficiary.BANK && operation == ClientOperation.SELL) ||
-                (beneficiary == Beneficiary.CLIENT && operation == ClientOperation.BUY)) {
+        if ((beneficiary == Beneficiary.BANK && operation == ClientOperation.SELL)
+                || (beneficiary == Beneficiary.CLIENT && operation == ClientOperation.BUY)) {
             return quote2.getBid().compareTo(quote1.getBid());
         }
-        return 1;
+        return 0;
     }
 }
