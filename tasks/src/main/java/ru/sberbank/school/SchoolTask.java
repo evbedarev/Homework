@@ -13,7 +13,11 @@ public enum SchoolTask {
     GENERICS_06("Generics", 6),
     COLLECTIONS_07("Коллекции", 7),
     SERIALIZATION_BASE("Базовая сериализация", 8),
-    SERIALIZATION_ADVANCED("Продвинутая сериализация", 9);
+    SERIALIZATION_ADVANCED("Продвинутая сериализация", 9),
+    THREAD_POOL_FIXED("Пул потоков", 10),
+    THREAD_POOL_WITH_CONCURRENT("Пул потоков с продвинутой многопоточкой и хорошими тестами", 11),
+    STREAM_API("Stream API", 12),
+    END("ЭТА КАНЕЦ!", 99);
 
     private final String name;
     private final int code;
